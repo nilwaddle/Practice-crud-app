@@ -25,15 +25,15 @@ class Item(BaseModel):
 
     class Config:
         orm_mode = True
-
-app = FastAPI()
-
+Base.metadata.create_all(engine)
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+app = FastAPI()
 
 @app.post("/items/", response_model=Item)
 def create_item(item: Item, db: Session = Depends(get_db)):
